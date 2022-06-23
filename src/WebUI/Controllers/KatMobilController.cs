@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.WebUI.Controllers;
-[Route("api/[controller]")]
-[ApiController]
 public class KatMobilController : ControllerBase
 {
     private readonly IApplicationDbContext _context;
