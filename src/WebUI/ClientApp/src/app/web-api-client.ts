@@ -86,6 +86,83 @@ export class KategoriClient implements IKategoriClient {
     }
 }
 
+export interface IKatMobilClient {
+    get(kategoriId: string | undefined): Observable<KatMobil[]>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class KatMobilClient implements IKatMobilClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    get(kategoriId: string | undefined): Observable<KatMobil[]> {
+        let url_ = this.baseUrl + "/api/KatMobil?";
+        if (kategoriId === null)
+            throw new Error("The parameter 'kategoriId' cannot be null.");
+        else if (kategoriId !== undefined)
+            url_ += "kategoriId=" + encodeURIComponent("" + kategoriId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<KatMobil[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<KatMobil[]>;
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<KatMobil[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(KatMobil.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface ITodoItemsClient {
     getTodoItemsWithPagination(listId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Observable<PaginatedListOfTodoItemBriefDto>;
     create(command: CreateTodoItemCommand): Observable<number>;
@@ -758,6 +835,110 @@ export class CreateKategoriCommand implements ICreateKategoriCommand {
 
 export interface ICreateKategoriCommand {
     name?: string | undefined;
+}
+
+export class KatMobil implements IKatMobil {
+    id?: string;
+    nama?: string;
+    harga?: number;
+    km?: number;
+    tahunProduksi?: number;
+    image?: string;
+    kategori?: Kategori;
+    kategoriId?: string;
+
+    constructor(data?: IKatMobil) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.nama = _data["nama"];
+            this.harga = _data["harga"];
+            this.km = _data["km"];
+            this.tahunProduksi = _data["tahunProduksi"];
+            this.image = _data["image"];
+            this.kategori = _data["kategori"] ? Kategori.fromJS(_data["kategori"]) : <any>undefined;
+            this.kategoriId = _data["kategoriId"];
+        }
+    }
+
+    static fromJS(data: any): KatMobil {
+        data = typeof data === 'object' ? data : {};
+        let result = new KatMobil();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["nama"] = this.nama;
+        data["harga"] = this.harga;
+        data["km"] = this.km;
+        data["tahunProduksi"] = this.tahunProduksi;
+        data["image"] = this.image;
+        data["kategori"] = this.kategori ? this.kategori.toJSON() : <any>undefined;
+        data["kategoriId"] = this.kategoriId;
+        return data;
+    }
+}
+
+export interface IKatMobil {
+    id?: string;
+    nama?: string;
+    harga?: number;
+    km?: number;
+    tahunProduksi?: number;
+    image?: string;
+    kategori?: Kategori;
+    kategoriId?: string;
+}
+
+export class Kategori implements IKategori {
+    id?: string;
+    name?: string;
+
+    constructor(data?: IKategori) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): Kategori {
+        data = typeof data === 'object' ? data : {};
+        let result = new Kategori();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IKategori {
+    id?: string;
+    name?: string;
 }
 
 export class PaginatedListOfTodoItemBriefDto implements IPaginatedListOfTodoItemBriefDto {
