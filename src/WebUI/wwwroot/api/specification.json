@@ -39,40 +39,6 @@
         }
       }
     },
-    "/api/KatMobil": {
-      "get": {
-        "tags": [
-          "KatMobil"
-        ],
-        "operationId": "KatMobil_Get",
-        "parameters": [
-          {
-            "name": "kategoriId",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/KatMobil"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/TodoItems": {
       "get": {
         "tags": [
@@ -514,54 +480,6 @@
           "name": {
             "type": "string",
             "nullable": true
-          }
-        }
-      },
-      "KatMobil": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "nama": {
-            "type": "string"
-          },
-          "harga": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "km": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "tahunProduksi": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "image": {
-            "type": "string"
-          },
-          "kategori": {
-            "$ref": "#/components/schemas/Kategori"
-          },
-          "kategoriId": {
-            "type": "string",
-            "format": "guid"
-          }
-        }
-      },
-      "Kategori": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "name": {
-            "type": "string"
           }
         }
       },
