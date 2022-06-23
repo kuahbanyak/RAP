@@ -33,6 +33,8 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
     public DbSet<Kategori> Kategoris => Set<Kategori>();
 
+    public DbSet<KatMobil> KatMobils => Set<KatMobil>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

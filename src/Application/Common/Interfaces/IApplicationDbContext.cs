@@ -10,5 +10,7 @@ public interface IApplicationDbContext
     DbSet<TodoItem> TodoItems { get; }
 
     DbSet<Kategori> Kategoris { get; }
+
+    DbSet<KatMobil> KatMobils { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
