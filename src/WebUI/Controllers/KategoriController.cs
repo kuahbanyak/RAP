@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.WebUI.Controllers;
 
-    public class KategoriController : ApiControllerBase
+public class KategoriController : ApiControllerBase
+{
+    [HttpPost]
+    public async Task<ActionResult<Guid>> Create(CreateKategoriCommand command)
     {
-        [HttpPost]
-        public async Task<ActionResult<Guid>> Create(CreateKategoriCommand command)
-        {
-            return await Mediator.Send(command);
-        }
+        return await Mediator.Send(command);
     }
+}

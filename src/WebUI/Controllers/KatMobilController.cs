@@ -1,4 +1,4 @@
-﻿/*using CleanArchitecture.Application.Common.Interfaces;
+﻿using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +14,7 @@ public class KatMobilController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<KatMobil>>>Get(Guid kategoriId)
+    public async Task<ActionResult<List<KatMobil>>> Get(Guid kategoriId)
     {
         var katmobils = await _context.KatMobils
             .Where(c => c.KategoriId == kategoriId)
@@ -22,4 +22,3 @@ public class KatMobilController : ControllerBase
         return Ok(katmobils);
     }
 }
-*/

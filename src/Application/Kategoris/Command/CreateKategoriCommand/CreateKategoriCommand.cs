@@ -4,13 +4,13 @@ using MediatR;
 
 namespace CleanArchitecture.Application.Kategoris.Commands.CreateKategoriCommand;
 
-    public record CreateKategoriCommand : IRequest<Guid>
-    {
-        public string? Name { get; set; }
-    }
+public record CreateKategoriCommand : IRequest<Guid>
+{
+    public string? Name { get; set; }
+}
 
 
-public class  CreateKategoriCommandHandler : IRequestHandler<CreateKategoriCommand, Guid>
+public class CreateKategoriCommandHandler : IRequestHandler<CreateKategoriCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
 
@@ -25,6 +25,7 @@ public class  CreateKategoriCommandHandler : IRequestHandler<CreateKategoriComma
         {
             Name = request.Name
         };
+
 
         _context.Kategoris.Add(entity);
 
