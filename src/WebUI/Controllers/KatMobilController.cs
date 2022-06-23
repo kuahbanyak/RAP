@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Application.Common.Interfaces;
+﻿/*using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,3 +22,4 @@ public class KatMobilController : ControllerBase
         return Ok(katmobils);
     }
 }
+*/
